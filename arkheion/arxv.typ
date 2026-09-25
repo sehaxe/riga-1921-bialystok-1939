@@ -63,8 +63,8 @@
     columns: (1fr,) * calc.min(3, authors.len()),
     gutter: 2em,
     ..authors.enumerate().map(((i, a)) => align(center)[
-      *#a.name*#if note != none and i == 0 { footnote(note) } \
-      #a.affiliation \
+      *#a.name* \
+      #a.affiliation#if note != none and i == 0 { footnote(note) } \
       #a.address \
       #text(font: "PT Mono", weight: 700, size: 0.92em, a.email)
     ]),
