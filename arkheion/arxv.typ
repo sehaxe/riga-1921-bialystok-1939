@@ -11,8 +11,9 @@
   running-title: none,    // колонтитул нечётных страниц
   body,
 ) = {
+  set document(author: authors.map(a => a.name), title: title)
   set page(
-    margin: (x: 25mm, y: 25mm),
+    margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
     numbering: "1",
     header: context {
       let i = counter(page).get().first()
@@ -31,16 +32,28 @@
       }
     },
   )
-  set text(size: 11pt)
+  set text(font: "New Computer Modern", size: 11pt)
   set par(justify: true)
+  set text(hyphenate: false)
   set heading(numbering: "1.1")
+  show heading: it => {
+    if it.level == 1 {
+      pad(bottom: 10pt, it)
+    } else if it.level == 2 {
+      pad(bottom: 8pt, it)
+    } else if it.level > 3 {
+      text(11pt, weight: "bold", it.body + " ")
+    } else {
+      it
+    }
+  }
   set bibliography(title: [Список источников и литературы])
 
   // Верхняя линейка (как в оригинале arXiv — над заголовком).
   line(length: 100%, stroke: 1.2pt)
   v(10pt)
 
-  align(center, text(size: 1.85em, title))
+  align(center, par(justify: false, text(size: 1.85em, title)))
   v(4pt)
   align(center, text(size: 10pt, tracking: 0.06em, weight: "medium")[РЕФЕРАТ])
   v(14pt)
@@ -53,7 +66,7 @@
       *#a.name*#if note != none and i == 0 { footnote(note) } \
       #a.affiliation \
       #a.address \
-      #text(font: "New Computer Modern Mono", weight: 700, size: 0.92em, a.email)
+      #text(font: "PT Mono", weight: 700, size: 0.92em, a.email)
     ]),
   )
   v(12pt)
