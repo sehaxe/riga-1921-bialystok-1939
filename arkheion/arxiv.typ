@@ -8,21 +8,37 @@
   abstract: none,
   keywords: (),
   note: none,             // сноска на первой странице
-  running-title: none,    // колонтитул нечётных страниц
+  running-title: none,    // колонтитул справа сверху
+  front: none,            // титульный лист по ГОСТ и форзац до основной части
   body,
 ) = {
   set document(author: authors.map(a => a.name), title: title)
+
+  // ---- передняя часть: титул (без номера страницы) и форзац ----
+  if front != none {
+    set page(
+      margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
+      numbering: none,
+      header: none,
+      footer: none,
+    )
+    set text(font: ("Times New Roman", "Liberation Serif", "Noto Serif"),
+      size: 14pt, lang: "ru")
+    set par(first-line-indent: 0mm, justify: false, spacing: 0em)
+    front
+  }
+
   set page(
     margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
     footer: context {
       let i = counter(page).get().first()
-      if i > 1 {
+      if i > 3 {
         align(center, text(size: 8.5pt, fill: luma(40%), numbering("1", i)))
       }
     },
     header: context {
       let i = counter(page).get().first()
-      if i > 1 {
+      if i > 3 {
         set text(size: 7.5pt, fill: luma(40%))
         let ch(s) = s.codepoints().at(0, default: "")
         let short(a) = {
