@@ -1,6 +1,5 @@
 .DS_Store
-arkheion/page-*.png
-arkheion/head-*.png
-arkheion/head_crop.png
-arkheion/top1.png
+arkheion/*.png
 arkheion/*.aux
+arkheion/fresh.txt
+arkheion/zzzuniq*
