@@ -18,9 +18,13 @@
   if front != none {
     set page(
       margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
-      numbering: none,
       header: none,
-      footer: none,
+      footer: context {
+        let i = counter(page).get().first()
+        if i > 1 {
+          align(center, text(size: 8.5pt, fill: luma(40%), numbering("1", i)))
+        }
+      },
     )
     set text(font: ("Times New Roman", "Liberation Serif", "Noto Serif"),
       size: 14pt, lang: "ru")
@@ -32,7 +36,7 @@
     margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
     footer: context {
       let i = counter(page).get().first()
-      if i > 3 {
+      if i > 1 {
         align(center, text(size: 8.5pt, fill: luma(40%), numbering("1", i)))
       }
     },
@@ -104,7 +108,7 @@
     abstract
     if keywords.len() > 0 {
       v(6pt)
-      [*Ключевые слова:* #keywords.join(" · ")]
+      [*Ключевые слова:* #keywords.join([~· ])]
     }
     v(12pt)
   }
