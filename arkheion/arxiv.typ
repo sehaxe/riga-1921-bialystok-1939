@@ -1,7 +1,7 @@
 // Свой шаблон в стиле официального шаблона arXiv («A Template for the arXiv Style»).
 // Порог верхнего блока: линейка → заголовок → бейдж → авторы → дата → аннотация → ключевые слова.
 
-#let arxv(
+#let arxiv(
   title: "",
   authors: (),            // (name, affiliation, address, email)
   date: none,
@@ -14,21 +14,27 @@
   set document(author: authors.map(a => a.name), title: title)
   set page(
     margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
-    numbering: "1",
+    footer: context {
+      let i = counter(page).get().first()
+      if i > 1 {
+        align(center, text(size: 8.5pt, fill: luma(40%), numbering("1", i)))
+      }
+    },
     header: context {
       let i = counter(page).get().first()
       if i > 1 {
-        set text(size: 8.5pt, fill: luma(40%))
+        set text(size: 7.5pt, fill: luma(40%))
         let ch(s) = s.codepoints().at(0, default: "")
         let short(a) = {
           let p = a.name.split(" ")
           p.at(0) + " " + ch(p.at(1, default: "")) + ". " + ch(p.at(2, default: "")) + "."
         }
-        if calc.odd(i) {
-          align(right, running-title)
-        } else {
-          align(left, authors.map(short).join(", "))
-        }
+        grid(
+          columns: (1fr, 1fr),
+          gutter: 1em,
+          align(left, authors.map(short).join(", ")),
+          align(right, running-title),
+        )
       }
     },
   )
@@ -53,8 +59,10 @@
   line(length: 100%, stroke: 1.2pt)
   v(10pt)
 
-  align(center, par(justify: false, text(size: 1.85em, title)))
-  v(4pt)
+  align(center, par(justify: false, text(size: 1.85em, tracking: 0.02em, smallcaps(title))))
+  v(6pt)
+  line(length: 100%, stroke: 1.2pt)
+  v(10pt)
   align(center, text(size: 10pt, tracking: 0.06em, weight: "medium")[РЕФЕРАТ])
   v(14pt)
 
